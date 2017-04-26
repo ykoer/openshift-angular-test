@@ -1,0 +1,35 @@
+{
+  "name": "containercatalog-mgmt",
+  "authors": [
+    "Yusuf Koer <ykoer@redhat.com>"
+  ],
+  "description": "An AngularJS based application for the PM's to manage containercatalog data",
+  "main": "",
+  "keywords": [
+    "rhcc",
+    "containercatalog",
+    "pmasks"
+  ],
+  "license": "MIT",
+  "homepage": "https://access.redhat.com/containers/",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "src/main/webapp/bower_components/"
+  ],
+  "dependencies": {
+    "angular": "^1.6.3",
+    "angular-resource": "^1.6.3",
+    "angular-patternfly": "^3.23.0",
+    "bootstrap-combobox": "^1.1.8",
+    "matchHeight": "^0.7.2",
+    "angular-ui-router": "^0.4.2",
+    "angular-ui-grid": "^4.0.3",
+    "angular-dynforms": "^0.0.4",
+    "angular-drag-and-drop-lists": "^2.1.0"
+  }
+}

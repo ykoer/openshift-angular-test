@@ -1,0 +1,1604 @@
+{
+    "entityInfo": {
+        "datastore": {
+            "backend": "mongo",
+            "collection": "containerImage",
+            "datasource": "mongodata"
+        },
+        "defaultVersion": "0.0.10-SNAPSHOT",
+        "enums": [
+            {
+                "annotatedValues": [
+                    {
+                        "description": "key for help file (aka atomic help)",
+                        "name": "help"
+                    },
+                    {
+                        "description": "key for build file (aka Dockerfile)",
+                        "name": "buildfile"
+                    }
+                ],
+                "name": "file_key",
+                "values": [
+                    "help",
+                    "buildfile"
+                ]
+            },
+            {
+                "annotatedValues": [
+                    {
+                        "description": "If Critical <= 7 days AND Important <= 30 days: B",
+                        "name": "B"
+                    },
+                    {
+                        "description": "If Critical <= 90 days AND Important <= 365 days: D",
+                        "name": "D"
+                    },
+                    {
+                        "description": "If no Critical/Important: A",
+                        "name": "A"
+                    },
+                    {
+                        "description": "If Critical > 365 days AND Important > 365 days: F",
+                        "name": "F"
+                    },
+                    {
+                        "description": "If Critical <= 30 days AND Important <= 90 days: C",
+                        "name": "C"
+                    },
+                    {
+                        "description": "If Critical <= 365 days AND Important <= 365 days: E",
+                        "name": "E"
+                    }
+                ],
+                "name": "freshness_grade",
+                "values": [
+                    "B",
+                    "D",
+                    "A",
+                    "F",
+                    "C",
+                    "E"
+                ]
+            },
+            {
+                "annotatedValues": [
+                    {
+                        "description": "Red Hat Enhancment Advisory",
+                        "name": "RHEA"
+                    },
+                    {
+                        "description": "Red Hat Bug Advisory",
+                        "name": "RHBA"
+                    },
+                    {
+                        "description": "Red Hat Security Advisory",
+                        "name": "RHSA"
+                    }
+                ],
+                "name": "advisory_type",
+                "values": [
+                    "RHEA",
+                    "RHBA",
+                    "RHSA"
+                ]
+            }
+        ],
+        "hooks": [
+            {
+                "actions": [
+                    "insert",
+                    "update"
+                ],
+                "configuration": {
+                    "arrayOrderingSignificant": false,
+                    "includeProjection": [
+                        {
+                            "field": "*",
+                            "include": true,
+                            "recursive": true
+                        },
+                        {
+                            "field": "parsed_data.rpm_manifest",
+                            "include": false,
+                            "recursive": false
+                        }
+                    ],
+                    "watchProjection": [
+                        {
+                            "field": "*",
+                            "include": true,
+                            "recursive": true
+                        },
+                        {
+                            "field": "parsed_data.rpm_manifest",
+                            "include": false,
+                            "recursive": false
+                        }
+                    ]
+                },
+                "name": "notificationHook"
+            }
+        ],
+        "indexes": [
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "repositories.*.repository"
+                    },
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "repositories.*.registry"
+                    }
+                ],
+                "name": "containerImage_repositories_identity"
+            },
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "repositories.*.published"
+                    }
+                ],
+                "name": "conatinerImage_repositories_published"
+            },
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": true,
+                        "dir": "$asc",
+                        "field": "parsed_data.labels.*.name"
+                    }
+                ],
+                "name": "conatinerImage_labels_name_ci"
+            },
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "vulnerabilities.*.advisory_id"
+                    },
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "vulnerabilities.*.cve_id"
+                    },
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "_id"
+                    }
+                ],
+                "name": "containerImage_vulnerability_identity",
+                "unique": true
+            },
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "image_id"
+                    },
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "repositories.tags"
+                    }
+                ],
+                "name": "containerImage_image_tags",
+                "unique": true
+            },
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "docker_image_digest"
+                    },
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "repositories.tags"
+                    }
+                ],
+                "name": "containerImage_digest_tags"
+            },
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "docker_image_digest"
+                    }
+                ],
+                "name": "containerImage_docker_image_digest",
+                "unique": true
+            },
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "image_id"
+                    }
+                ],
+                "name": "containerImage_image_id",
+                "unique": true
+            },
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "_id"
+                    }
+                ],
+                "name": null,
+                "unique": true
+            },
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "parsed_data.rpm_manifest.*.srpm_nevra"
+                    }
+                ],
+                "name": "containerImage_rpm_manifest_srpm_nevra"
+            },
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "parsed_data.rpm_manifest.*.srpm_name"
+                    }
+                ],
+                "name": "containerImage_rpm_manifest_srpm_name"
+            }
+        ],
+        "name": "containerImage"
+    },
+    "schema": {
+        "access": {
+            "delete": [
+                "lb-containerImage-delete"
+            ],
+            "find": [
+                "lb-containerImage-find"
+            ],
+            "insert": [
+                "lb-containerImage-insert"
+            ],
+            "update": [
+                "lb-containerImage-update"
+            ]
+        },
+        "fields": {
+            "_id": {
+                "description": null,
+                "type": "string"
+            },
+            "base_images": {
+                "description": "Reference to all base images for this image.  Uses layers to make the association.",
+                "entity": "containerImage",
+                "query": {
+                    "$and": [
+                        {
+                            "field": "_id",
+                            "op": "$neq",
+                            "rfield": "$parent._id"
+                        },
+                        {
+                            "field": "parsed_data.layers",
+                            "op": "$neq",
+                            "rvalue": null
+                        },
+                        {
+                            "$not": {
+                                "array": "parsed_data.layers",
+                                "elemMatch": {
+                                    "field": "$this",
+                                    "op": "$nin",
+                                    "rfield": "$parent.$parent.$parent.parsed_data.layers"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "type": "reference"
+            },
+            "base_images_red_hat": {
+                "description": "Reference to all base images for this image, specifically looking for only base Red Hat images.  Uses layers to make the association.",
+                "entity": "containerImage",
+                "query": {
+                    "$and": [
+                        {
+                            "field": "_id",
+                            "op": "$neq",
+                            "rfield": "$parent._id"
+                        },
+                        {
+                            "field": "repositories.*.registry",
+                            "op": "$eq",
+                            "rvalue": "registry.access.redhat.com"
+                        },
+                        {
+                            "field": "parsed_data.layers",
+                            "op": "$neq",
+                            "rvalue": null
+                        },
+                        {
+                            "$not": {
+                                "array": "parsed_data.layers",
+                                "elemMatch": {
+                                    "field": "$this",
+                                    "op": "$nin",
+                                    "rfield": "$parent.$parent.$parent.parsed_data.layers"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "type": "reference"
+            },
+            "brew": {
+                "description": "Object for all brew related fields.",
+                "fields": {
+                    "build": {
+                        "description": "Unique immutable build identifier in the brew build system.",
+                        "type": "string"
+                    },
+                    "completion_date": {
+                        "description": "Timestamp from Brew when the image has been succesfully built.",
+                        "type": "date"
+                    },
+                    "package": {
+                        "description": "A package name in our brew build system.",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "certifications": {
+                "description": null,
+                "items": {
+                    "fields": {
+                        "Finished_Time": {
+                            "description": "Time atomic scan completed (from atomic scan)",
+                            "type": "string"
+                        },
+                        "Scan_Time": {
+                            "description": "Time scan was executed (from atomic scan)",
+                            "type": "string"
+                        },
+                        "Scanner": {
+                            "description": "The name of the scanner (from atomic scan)",
+                            "type": "string"
+                        },
+                        "Successful": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "Indicate if scan was successful or not (from atomic scan)",
+                            "type": "boolean"
+                        },
+                        "Time": {
+                            "description": "? (from atomic scan)",
+                            "type": "string"
+                        },
+                        "UUID": {
+                            "description": "Unique identifier of the scan? (from atmoic scan)",
+                            "type": "string"
+                        },
+                        "assessment": {
+                            "description": null,
+                            "items": {
+                                "fields": {
+                                    "name": {
+                                        "constraints": {
+                                            "element-identity": true,
+                                            "required": true
+                                        },
+                                        "description": "Name of the assessment",
+                                        "type": "string"
+                                    },
+                                    "required_for_certification": {
+                                        "constraints": {
+                                            "required": true
+                                        },
+                                        "description": "Indicates if the assessment is required for certification",
+                                        "type": "boolean"
+                                    },
+                                    "value": {
+                                        "constraints": {
+                                            "required": true
+                                        },
+                                        "description": "Value of the assessment.  True means it passed.",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "type": "array"
+                        },
+                        "assessment#": {
+                            "access": {
+                                "find": [
+                                    "anyone"
+                                ]
+                            },
+                            "description": null,
+                            "type": "integer"
+                        },
+                        "atomic_scan_version": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "Version of atomic scan tool that ran the certification",
+                            "type": "string"
+                        },
+                        "certification_date": {
+                            "description": "Date this certification was completed",
+                            "type": "date"
+                        },
+                        "docker_version": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "Version of docker cli tool used",
+                            "type": "string"
+                        },
+                        "isv_plugin_version": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "Version of the isv plugin used with atomic scan",
+                            "type": "string"
+                        },
+                        "openscap_version": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "Version of openscap used by atomic scan",
+                            "type": "string"
+                        },
+                        "run_time": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "Timestamp when the scan stated",
+                            "type": "date"
+                        }
+                    },
+                    "type": "object"
+                },
+                "type": "array"
+            },
+            "certifications#": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ]
+                },
+                "description": null,
+                "type": "integer"
+            },
+            "certified": {
+                "constraints": {
+                    "required": true
+                },
+                "description": "Indicate if the image has been certified.",
+                "type": "boolean"
+            },
+            "cpe_ids": {
+                "description": "A map of applicable advisories to RPM NEVRA, required for scoring",
+                "items": {
+                    "type": "string"
+                },
+                "type": "array"
+            },
+            "cpe_ids#": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ]
+                },
+                "description": null,
+                "type": "integer"
+            },
+            "createdBy": {
+                "access": {
+                    "update": [
+                        "noone"
+                    ]
+                },
+                "constraints": {
+                    "required": true
+                },
+                "description": null,
+                "type": "string"
+            },
+            "creationDate": {
+                "access": {
+                    "update": [
+                        "noone"
+                    ]
+                },
+                "constraints": {
+                    "required": true
+                },
+                "description": null,
+                "type": "date",
+                "valueGenerator": {
+                    "type": "CurrentTime"
+                }
+            },
+            "display_data": {
+                "description": null,
+                "fields": {
+                    "long_description": {
+                        "constraints": {
+                            "required": true
+                        },
+                        "description": null,
+                        "type": "string"
+                    },
+                    "name": {
+                        "constraints": {
+                            "required": true
+                        },
+                        "description": null,
+                        "type": "string"
+                    },
+                    "short_description": {
+                        "constraints": {
+                            "required": true
+                        },
+                        "description": null,
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "docker_image_digest": {
+                "constraints": {
+                    "identity": true,
+                    "required": true
+                },
+                "description": "Docker Image Digest.  For docker 1.10 this is also known as the 'manifest digest'.",
+                "type": "string"
+            },
+            "docker_image_id": {
+                "description": "Docker Image ID.  For docker 1.10 this is also known as the 'config digest'.",
+                "type": "string"
+            },
+            "freshness_grades": {
+                "description": "the grade based on applicable updates and time provided by PST CVE engine",
+                "items": {
+                    "fields": {
+                        "creation_date": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "The timestamp for when this grade was added by the vulnerability engine.",
+                            "type": "date",
+                            "valueGenerator": {
+                                "type": "CurrentTime"
+                            }
+                        },
+                        "end_date": {
+                            "description": "The timestamp for when the grade no longer applies.  See start_date for when the grade starts.  If no value is set, the grade applies forever.  This should happen only for a grade of A (no vulnerabilities) or grade F.",
+                            "type": "date"
+                        },
+                        "grade": {
+                            "constraints": {
+                                "enum": "freshness_grade",
+                                "required": true
+                            },
+                            "description": "The grade.",
+                            "type": "string"
+                        },
+                        "start_date": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "The timestamp for when the grade applies.  See end_date for when the grade stops.",
+                            "type": "date"
+                        }
+                    },
+                    "type": "object"
+                },
+                "type": "array"
+            },
+            "freshness_grades#": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ]
+                },
+                "description": null,
+                "type": "integer"
+            },
+            "image_id": {
+                "description": "DEPRECATED: hash created by pulp, for RH images only.  Will migrate to pulp_image_id in the future",
+                "type": "string"
+            },
+            "label_override": {
+                "description": "Manually overriden label values.  When set, should be taken instead of label set on the image.",
+                "fields": {
+                    "description": {
+                        "description": "Override for 'description' label.",
+                        "type": "string"
+                    },
+                    "io_k8s_displayName": {
+                        "description": "Override for 'io.k8s.display-name' label.",
+                        "type": "string"
+                    },
+                    "io_openshift_tags": {
+                        "description": "Override for 'io.openshift.tags' label.",
+                        "type": "string"
+                    },
+                    "summary": {
+                        "description": "Override for 'summary' label.",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "lastUpdateDate": {
+                "constraints": {
+                    "required": true
+                },
+                "description": null,
+                "type": "date",
+                "valueGenerator": {
+                    "overwrite": true,
+                    "type": "CurrentTime"
+                }
+            },
+            "lastUpdatedBy": {
+                "constraints": {
+                    "required": true
+                },
+                "description": null,
+                "type": "string"
+            },
+            "objectType": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ],
+                    "update": [
+                        "noone"
+                    ]
+                },
+                "constraints": {
+                    "minLength": 1,
+                    "required": true
+                },
+                "description": null,
+                "type": "string"
+            },
+            "parsed_data": {
+                "description": "Data parsed from image metadata.  These fields are not computed from any other source",
+                "fields": {
+                    "architecture": {
+                        "description": null,
+                        "type": "string"
+                    },
+                    "author": {
+                        "description": null,
+                        "type": "string"
+                    },
+                    "command": {
+                        "description": null,
+                        "type": "string"
+                    },
+                    "comment": {
+                        "description": null,
+                        "type": "string"
+                    },
+                    "container": {
+                        "description": null,
+                        "type": "string"
+                    },
+                    "created": {
+                        "description": "The 'created' date reported by image metadata.  Stored as string because we do not have control on that format.",
+                        "type": "string"
+                    },
+                    "docker_image_digest": {
+                        "description": null,
+                        "type": "string"
+                    },
+                    "docker_image_id": {
+                        "description": null,
+                        "type": "string"
+                    },
+                    "docker_version": {
+                        "description": "Version of docker reported by 'docker inspect' for this image",
+                        "type": "string"
+                    },
+                    "env_variables": {
+                        "description": null,
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "env_variables#": {
+                        "access": {
+                            "find": [
+                                "anyone"
+                            ]
+                        },
+                        "description": null,
+                        "type": "integer"
+                    },
+                    "files": {
+                        "constraint": {
+                            "maxItems": 3
+                        },
+                        "description": null,
+                        "items": {
+                            "fields": {
+                                "content": {
+                                    "constraints": {
+                                        "maxLength": 1048576
+                                    },
+                                    "descriptiON": "Optional, encoded contents of a text file",
+                                    "description": null,
+                                    "type": "string"
+                                },
+                                "content_url": {
+                                    "description": "URL to the content for this file",
+                                    "type": "string"
+                                },
+                                "filename": {
+                                    "description": "name of the file on this image",
+                                    "type": "string"
+                                },
+                                "key": {
+                                    "constraint": {
+                                        "element-identity": true,
+                                        "enum": "file_key",
+                                        "required": true
+                                    },
+                                    "description": "key to indicate the type of file this is, i.e. 'buildfile' or 'help'",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "type": "array"
+                    },
+                    "files#": {
+                        "access": {
+                            "find": [
+                                "anyone"
+                            ]
+                        },
+                        "description": null,
+                        "type": "integer"
+                    },
+                    "image_id": {
+                        "description": null,
+                        "type": "string"
+                    },
+                    "labels": {
+                        "description": null,
+                        "items": {
+                            "fields": {
+                                "name": {
+                                    "constraints": {
+                                        "element-identity": true,
+                                        "required": true
+                                    },
+                                    "description": "name of the label",
+                                    "type": "string"
+                                },
+                                "value": {
+                                    "constraints": {
+                                        "required": true
+                                    },
+                                    "description": "value of the label",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "type": "array"
+                    },
+                    "labels#": {
+                        "access": {
+                            "find": [
+                                "anyone"
+                            ]
+                        },
+                        "description": null,
+                        "type": "integer"
+                    },
+                    "layers": {
+                        "description": "Array of layer digests from the image",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "layers#": {
+                        "access": {
+                            "find": [
+                                "anyone"
+                            ]
+                        },
+                        "description": null,
+                        "type": "integer"
+                    },
+                    "os": {
+                        "description": null,
+                        "type": "string"
+                    },
+                    "ports": {
+                        "description": null,
+                        "type": "string"
+                    },
+                    "repos": {
+                        "description": "Repositories defined within an image as reported by yum command.",
+                        "items": {
+                            "fields": {
+                                "baseurl": {
+                                    "description": null,
+                                    "type": "string"
+                                },
+                                "expire": {
+                                    "description": null,
+                                    "type": "string"
+                                },
+                                "filename": {
+                                    "description": null,
+                                    "type": "string"
+                                },
+                                "id": {
+                                    "constraints": {
+                                        "element-identity": true
+                                    },
+                                    "description": null,
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "description": null,
+                                    "type": "string"
+                                },
+                                "pkgs": {
+                                    "description": null,
+                                    "type": "string"
+                                },
+                                "size": {
+                                    "description": null,
+                                    "type": "string"
+                                },
+                                "updated": {
+                                    "description": null,
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "type": "array"
+                    },
+                    "repos#": {
+                        "access": {
+                            "find": [
+                                "anyone"
+                            ]
+                        },
+                        "description": null,
+                        "type": "integer"
+                    },
+                    "rpm_manifest": {
+                        "description": "Content manifest of this image.  RPM content included in the image.",
+                        "items": {
+                            "fields": {
+                                "architecture": {
+                                    "description": "RPM architecture",
+                                    "type": "string"
+                                },
+                                "gpg": {
+                                    "description": "GPG key used to sign the RPM",
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "description": "RPM name",
+                                    "type": "string"
+                                },
+                                "nvra": {
+                                    "constraints": {
+                                        "element-identity": true
+                                    },
+                                    "description": "RPM name, version, release, and architecture",
+                                    "type": "string"
+                                },
+                                "release": {
+                                    "description": "RPM release",
+                                    "type": "string"
+                                },
+                                "srpm_name": {
+                                    "description": "Source RPM name",
+                                    "type": "string"
+                                },
+                                "srpm_nevra": {
+                                    "description": "Source RPM NEVRA (name, epoch, version, release, architecture)",
+                                    "type": "string"
+                                },
+                                "summary": {
+                                    "description": "RPM summary",
+                                    "type": "string"
+                                },
+                                "version": {
+                                    "description": "RPM version",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "type": "array"
+                    },
+                    "rpm_manifest#": {
+                        "access": {
+                            "find": [
+                                "anyone"
+                            ]
+                        },
+                        "description": null,
+                        "type": "integer"
+                    },
+                    "size": {
+                        "description": "Size of this image as reported by image metadata.",
+                        "type": "integer"
+                    },
+                    "user": {
+                        "description": "The user on the image",
+                        "type": "string"
+                    },
+                    "virtual_size": {
+                        "description": "Virtual size of this image as reported by image metadata.",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "pulp_image_id": {
+                "description": "ID generated in pulp for RH images.",
+                "type": "string"
+            },
+            "raw_config": {
+                "description": "Raw image configuration, such as output from docker inspect.",
+                "type": "string"
+            },
+            "raw_openscap": {
+                "description": "Raw openscap results from ISV plugin execution.",
+                "type": "string"
+            },
+            "repositories": {
+                "description": null,
+                "items": {
+                    "fields": {
+                        "content_advisories": {
+                            "description": "Array of advisories this layer is addressing. Advisory being fixed by this image layer.",
+                            "items": {
+                                "fields": {
+                                    "cves": {
+                                        "description": "Array of CVEs fixed by this advisory",
+                                        "items": {
+                                            "fields": {
+                                                "id": {
+                                                    "constraints": {
+                                                        "required": true
+                                                    },
+                                                    "description": "Unique identifier of the issue in the issue tracking system",
+                                                    "type": "string"
+                                                },
+                                                "url": {
+                                                    "constraints": {
+                                                        "required": true
+                                                    },
+                                                    "description": "Publicly accessible URL of the issue information",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "type": "array"
+                                    },
+                                    "cves#": {
+                                        "access": {
+                                            "find": [
+                                                "anyone"
+                                            ]
+                                        },
+                                        "description": null,
+                                        "type": "integer"
+                                    },
+                                    "id": {
+                                        "constraints": {
+                                            "required": true
+                                        },
+                                        "description": "Unique descriptor of the ID. For example RHBA:2016-102",
+                                        "type": "string"
+                                    },
+                                    "issues": {
+                                        "description": "Array of issues fixed by this advisory",
+                                        "items": {
+                                            "fields": {
+                                                "id": {
+                                                    "description": "Unique identifier of the issue in the issue tracking system",
+                                                    "type": "string"
+                                                },
+                                                "issue_tracker": {
+                                                    "description": "Hostname of the issue tracking system used",
+                                                    "type": "string"
+                                                },
+                                                "url": {
+                                                    "description": "Publicly accessible URL of the issue information",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "type": "array"
+                                    },
+                                    "issues#": {
+                                        "access": {
+                                            "find": [
+                                                "anyone"
+                                            ]
+                                        },
+                                        "description": null,
+                                        "type": "integer"
+                                    },
+                                    "summary": {
+                                        "constraints": {
+                                            "maxLength": 5120,
+                                            "required": true
+                                        },
+                                        "description": "Short summary of the advisory. TODO set realistic limit.",
+                                        "type": "string"
+                                    },
+                                    "url": {
+                                        "constraints": {
+                                            "required": true
+                                        },
+                                        "description": "Publicly accessible URL of the advisory information",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "type": "array"
+                        },
+                        "content_advisories#": {
+                            "access": {
+                                "find": [
+                                    "anyone"
+                                ]
+                            },
+                            "description": null,
+                            "type": "integer"
+                        },
+                        "image_advisory": {
+                            "description": "Advisory for the image itself.",
+                            "fields": {
+                                "cves": {
+                                    "description": "Array of CVEs fixed by this advisory",
+                                    "items": {
+                                        "fields": {
+                                            "id": {
+                                                "constraints": {
+                                                    "required": true
+                                                },
+                                                "description": "Unique identifier of the issue in the issue tracking system",
+                                                "type": "string"
+                                            },
+                                            "url": {
+                                                "constraints": {
+                                                    "required": true
+                                                },
+                                                "description": "Publicly accessible URL of the issue information",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "type": "array"
+                                },
+                                "cves#": {
+                                    "access": {
+                                        "find": [
+                                            "anyone"
+                                        ]
+                                    },
+                                    "description": null,
+                                    "type": "integer"
+                                },
+                                "id": {
+                                    "constraints": {
+                                        "required": true
+                                    },
+                                    "description": "Unique descriptor of the ID. For example RHBA:2016-102",
+                                    "type": "string"
+                                },
+                                "issues": {
+                                    "description": "Array of issues fixed by this advisory",
+                                    "items": {
+                                        "fields": {
+                                            "id": {
+                                                "description": "Unique identifier of the issue in the issue tracking system",
+                                                "type": "string"
+                                            },
+                                            "issue_tracker": {
+                                                "description": "Hostname of the issue tracking system used",
+                                                "type": "string"
+                                            },
+                                            "url": {
+                                                "description": "Publicly accessible URL of the issue information",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "type": "array"
+                                },
+                                "issues#": {
+                                    "access": {
+                                        "find": [
+                                            "anyone"
+                                        ]
+                                    },
+                                    "description": null,
+                                    "type": "integer"
+                                },
+                                "ship_date": {
+                                    "description": "The date the image advisory shipped.",
+                                    "type": "date"
+                                },
+                                "summary": {
+                                    "constraints": {
+                                        "maxLength": 5120,
+                                        "required": true
+                                    },
+                                    "description": "Short summary of the advisory. TODO set realistic limit.",
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "constraints": {
+                                        "required": true
+                                    },
+                                    "description": "Publicly accessible URL of the advisory information",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "published": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "Indicate if the image has been published to the container catalog.",
+                            "type": "boolean"
+                        },
+                        "published_date": {
+                            "description": "Date the image was published to the container catalog.",
+                            "type": "date"
+                        },
+                        "push_date": {
+                            "description": "When the image was pushed to this repository.  For RH images this is picked from first found of advisory ship_date, brew completion_date, and finally repositories publish_date.  For ISV images this TBD but is probably going to be only sourced from publish_date but could come from parsed_data.created.",
+                            "type": "date",
+                            "valueGenerator": {
+                                "type": "CurrentTime"
+                            }
+                        },
+                        "registry": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "Hostname of the registry where the repository can be accessed",
+                            "type": "string"
+                        },
+                        "repositories": {
+                            "description": null,
+                            "entity": "containerRepository",
+                            "query": {
+                                "$and": [
+                                    {
+                                        "field": "registry",
+                                        "op": "$eq",
+                                        "rfield": "$parent.registry"
+                                    },
+                                    {
+                                        "field": "repository",
+                                        "op": "$eq",
+                                        "rfield": "$parent.repository"
+                                    }
+                                ]
+                            },
+                            "type": "reference"
+                        },
+                        "repository": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "Repository name",
+                            "type": "string"
+                        },
+                        "tags": {
+                            "constraints": {
+                                "minItems": 1
+                            },
+                            "description": "List of container tags assigned to this layer",
+                            "items": {
+                                "fields": {
+                                    "added_date": {
+                                        "constraints": {
+                                            "required": true
+                                        },
+                                        "description": null,
+                                        "type": "date",
+                                        "valueGenerator": {
+                                            "type": "CurrentTime"
+                                        }
+                                    },
+                                    "name": {
+                                        "constraints": {
+                                            "required": true
+                                        },
+                                        "description": "The name of the tag",
+                                        "type": "string"
+                                    },
+                                    "removed_date": {
+                                        "description": "Date this tag was removed from the image in this repo.  If the tag is added back, add a new entry in 'tags' array",
+                                        "type": "date"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "type": "array"
+                        },
+                        "tags#": {
+                            "access": {
+                                "find": [
+                                    "anyone"
+                                ]
+                            },
+                            "description": null,
+                            "type": "integer"
+                        }
+                    },
+                    "type": "object"
+                },
+                "type": "array"
+            },
+            "repositories#": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ]
+                },
+                "description": null,
+                "type": "integer"
+            },
+            "runs_on": {
+                "description": "Describes what the image can be run on.",
+                "fields": {
+                    "atomic_host": {
+                        "description": "Can the image run on atomic_host",
+                        "type": "boolean"
+                    },
+                    "atomic_host_versions": {
+                        "description": "If image can run on atomic_host, what are the versions of atomic_host it can run on.",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "atomic_host_versions#": {
+                        "access": {
+                            "find": [
+                                "anyone"
+                            ]
+                        },
+                        "description": null,
+                        "type": "integer"
+                    },
+                    "openshift_container_platform": {
+                        "description": "Can the image run on openshift_container_platform",
+                        "type": "boolean"
+                    },
+                    "openshift_container_platform_versions": {
+                        "description": "If image can run on openshift_container_platform, what are the versions of openshift_container_platform it can run on.",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "openshift_container_platform_versions#": {
+                        "access": {
+                            "find": [
+                                "anyone"
+                            ]
+                        },
+                        "description": null,
+                        "type": "integer"
+                    },
+                    "openshift_dedicated": {
+                        "description": "Can the image run on openshift_dedicated",
+                        "type": "boolean"
+                    },
+                    "openshift_dedicated_versions": {
+                        "description": "If image can run on openshift_dedicated, what are the versions of openshift_dedicated it can run on.",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "openshift_dedicated_versions#": {
+                        "access": {
+                            "find": [
+                                "anyone"
+                            ]
+                        },
+                        "description": null,
+                        "type": "integer"
+                    },
+                    "openshift_online": {
+                        "description": "Can the image run on openshift_online",
+                        "type": "boolean"
+                    },
+                    "openshift_online_versions": {
+                        "description": "If image can run on openshift_online, what are the versions of openshift_online it can run on.",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "openshift_online_versions#": {
+                        "access": {
+                            "find": [
+                                "anyone"
+                            ]
+                        },
+                        "description": null,
+                        "type": "integer"
+                    },
+                    "rhel7_plus_docker": {
+                        "description": "Can the image run on rhel7_plus_docker",
+                        "type": "boolean"
+                    },
+                    "rhel7_plus_docker_versions": {
+                        "description": "If image can run on rhel7_plus_docker, what are the versions of rhel7_plus_docker it can run on.",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "rhel7_plus_docker_versions#": {
+                        "access": {
+                            "find": [
+                                "anyone"
+                            ]
+                        },
+                        "description": null,
+                        "type": "integer"
+                    },
+                    "runc": {
+                        "description": "Can the image run on runc",
+                        "type": "boolean"
+                    },
+                    "runc_versions": {
+                        "description": "If image can run on runc, what are the versions of runc it can run on.",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "runc_versions#": {
+                        "access": {
+                            "find": [
+                                "anyone"
+                            ]
+                        },
+                        "description": null,
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "sum_layer_size_bytes": {
+                "description": "The total size of the sum of all layers for each image in bytes.  This is computed externally and may not match what is reported by the image metadata (see parsed_data.size).",
+                "type": "integer"
+            },
+            "vulnerabilities": {
+                "description": "Array of CVEs for this image with related advisory.  This is the vulnerabilities that apply to this image, not those that are fixed by the image.",
+                "items": {
+                    "fields": {
+                        "advisory": {
+                            "description": "Reference to the advisory for the CVE.  Returns as an array with zero to one elements.",
+                            "entity": "redHatAdvisory",
+                            "query": {
+                                "field": "_id",
+                                "op": "$eq",
+                                "rfield": "$parent.advisory_id"
+                            },
+                            "type": "reference"
+                        },
+                        "advisory_id": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "The _id of the redHatAdvisory that contains this CVE.",
+                            "type": "string"
+                        },
+                        "cve_id": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "ID of the CVE",
+                            "type": "string"
+                        },
+                        "packages": {
+                            "constraints": {
+                                "minItems": 1,
+                                "required": true
+                            },
+                            "description": "Array of package information applicable to this CVE.",
+                            "items": {
+                                "fields": {
+                                    "fixed_by_image": {
+                                        "description": "The next image that fixes this vulnerability.",
+                                        "fields": {
+                                            "id": {
+                                                "constraints": {
+                                                    "required": true
+                                                },
+                                                "description": "The _id of the image that fixes the vulnerability",
+                                                "type": "string"
+                                            },
+                                            "images": {
+                                                "description": "Reference to the image that fixes the vulnerability.  If using, keep in mind this will take a *long* time to return because it's an association inside nested arrays.  If those arrays are large, it's a lot of queries that are spawned.  The intent of this is to make checking the contents of the denormalized 'repositories' array here easier for debugging and the application managing that data.",
+                                                "entity": "containerImage",
+                                                "query": {
+                                                    "field": "_id",
+                                                    "op": "$eq",
+                                                    "rfield": "$parent.id"
+                                                },
+                                                "type": "reference"
+                                            },
+                                            "repositories": {
+                                                "constraints": {
+                                                    "minItems": 1,
+                                                    "required": true
+                                                },
+                                                "description": "Denormalized to not require lookup in UI.  RISK: could get out of sync with real refrenced data.",
+                                                "items": {
+                                                    "fields": {
+                                                        "registry": {
+                                                            "constraints": {
+                                                                "required": true
+                                                            },
+                                                            "type": "string"
+                                                        },
+                                                        "repository": {
+                                                            "constraints": {
+                                                                "required": true
+                                                            },
+                                                            "type": "string"
+                                                        },
+                                                        "tags": {
+                                                            "constraints": {
+                                                                "minItems": 1
+                                                            },
+                                                            "items": {
+                                                                "fields": {
+                                                                    "name": {
+                                                                        "constraints": {
+                                                                            "required": true
+                                                                        },
+                                                                        "type": "string"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            },
+                                                            "type": "array"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "type": "array"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "rpm_nvra": {
+                                        "constraints": {
+                                            "minItems": 1,
+                                            "required": true
+                                        },
+                                        "description": "Array of RPM nvra in this image that are vulnerable.",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "type": "array"
+                                    },
+                                    "rpm_nvra#": {
+                                        "access": {
+                                            "find": [
+                                                "anyone"
+                                            ]
+                                        },
+                                        "description": null,
+                                        "type": "integer"
+                                    },
+                                    "srpm_nevra": {
+                                        "constraints": {
+                                            "required": true
+                                        },
+                                        "description": "The source RPM that has the fix.",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "type": "array"
+                        },
+                        "packages#": {
+                            "access": {
+                                "find": [
+                                    "anyone"
+                                ]
+                            },
+                            "description": null,
+                            "type": "integer"
+                        },
+                        "public_date": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "Date the CVE was made public",
+                            "type": "string"
+                        },
+                        "severity": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "CVE severity",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "type": "array"
+            },
+            "vulnerabilities#": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ]
+                },
+                "description": null,
+                "type": "integer"
+            }
+        },
+        "name": "containerImage",
+        "status": {
+            "value": "active"
+        },
+        "version": {
+            "changelog": "Adding srpm_name field (INC0486133)",
+            "value": "0.0.10-SNAPSHOT"
+        }
+    }
+}

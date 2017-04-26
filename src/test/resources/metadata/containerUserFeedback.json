@@ -1,0 +1,224 @@
+{
+    "entityInfo": {
+        "datastore": {
+            "backend": "mongo",
+            "collection": "containerUserFeedback",
+            "datasource": "mongodata"
+        },
+        "defaultVersion": "0.0.1",
+        "enums": [
+            {
+                "annotatedValues": [
+                    {
+                        "description": "Feedback is about the user experience.",
+                        "name": "User Experience"
+                    },
+                    {
+                        "description": "Feedback is requesting new content.",
+                        "name": "Content Request"
+                    }
+                ],
+                "name": "feedback_type",
+                "values": [
+                    "User Experience",
+                    "Content Request"
+                ]
+            }
+        ],
+        "indexes": [
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": true,
+                        "dir": "$asc",
+                        "field": "redHatUserPrincipal"
+                    }
+                ],
+                "name": "containerUserFeedback_redHatUserPrincipal"
+            },
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "_id"
+                    }
+                ],
+                "name": null,
+                "unique": true
+            }
+        ],
+        "name": "containerUserFeedback"
+    },
+    "schema": {
+        "access": {
+            "delete": [
+                "lb-containerUserFeedback-delete"
+            ],
+            "find": [
+                "lb-containerUserFeedback-find"
+            ],
+            "insert": [
+                "lb-containerUserFeedback-insert"
+            ],
+            "update": [
+                "lb-containerUserFeedback-update"
+            ]
+        },
+        "fields": {
+            "_id": {
+                "access": {
+                    "update": [
+                        "noone"
+                    ]
+                },
+                "constraints": {
+                    "identity": true
+                },
+                "description": "Unique identifier for the metric.",
+                "type": "string",
+                "valueGenerator": {
+                    "type": "UUID"
+                }
+            },
+            "createdBy": {
+                "access": {
+                    "update": [
+                        "noone"
+                    ]
+                },
+                "constraints": {
+                    "required": true
+                },
+                "description": null,
+                "type": "string"
+            },
+            "creationDate": {
+                "access": {
+                    "update": [
+                        "noone"
+                    ]
+                },
+                "constraints": {
+                    "required": true
+                },
+                "description": null,
+                "type": "date",
+                "valueGenerator": {
+                    "type": "CurrentTime"
+                }
+            },
+            "feedback": {
+                "description": "One feedback provided via the form.",
+                "fields": {
+                    "text": {
+                        "constraints": {
+                            "maxLength": 1000,
+                            "minLength": 10,
+                            "required": true
+                        },
+                        "description": "The tfeedback_typeext for this feedback.",
+                        "type": "string"
+                    },
+                    "type": {
+                        "constraints": {
+                            "enum": "feedback_type",
+                            "required": true
+                        },
+                        "description": "The type of feedback.",
+                        "type": "string"
+                    },
+                    "url": {
+                        "constraints": {
+                            "maxLength": 320
+                        },
+                        "description": "Optional URL for the feedback.  Can be refering to a page the feedback is about or an example of something the user wants added.",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "lastUpdateDate": {
+                "constraints": {
+                    "required": true
+                },
+                "description": null,
+                "type": "date",
+                "valueGenerator": {
+                    "overwrite": true,
+                    "type": "CurrentTime"
+                }
+            },
+            "lastUpdatedBy": {
+                "constraints": {
+                    "required": true
+                },
+                "description": null,
+                "type": "string"
+            },
+            "objectType": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ],
+                    "update": [
+                        "noone"
+                    ]
+                },
+                "constraints": {
+                    "minLength": 1,
+                    "required": true
+                },
+                "description": null,
+                "type": "string"
+            },
+            "redHatUserPrincipal": {
+                "description": "The princpal (Red Hat SSO) of the user if they submitted feedback while logged in to redhat.com.",
+                "type": "string"
+            },
+            "user_data": {
+                "description": "Information supplied by the user about themself.",
+                "fields": {
+                    "company": {
+                        "description": "Company entered on the feedback form.",
+                        "type": "string"
+                    },
+                    "contact_allowed": {
+                        "constraints": {
+                            "required": true
+                        },
+                        "description": "If true indicates user would like to be contacted about the feedback.",
+                        "type": "boolean"
+                    },
+                    "email": {
+                        "constraints": {
+                            "required": true
+                        },
+                        "description": "Email address of the user entered on the feedback form.",
+                        "type": "string"
+                    },
+                    "name": {
+                        "constraints": {
+                            "required": true
+                        },
+                        "description": "Name of the user entered on the feedback form.",
+                        "type": "string"
+                    },
+                    "role": {
+                        "description": "Role entered on the feedback form.",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "name": "containerUserFeedback",
+        "status": {
+            "value": "active"
+        },
+        "version": {
+            "changelog": "Feedback for RHCC application from users.",
+            "value": "0.0.1"
+        }
+    }
+}

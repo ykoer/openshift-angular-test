@@ -1,0 +1,545 @@
+{
+    "entityInfo": {
+        "datastore": {
+            "backend": "mongo",
+            "collection": "containerRepository",
+            "datasource": "mongodata"
+        },
+        "defaultVersion": "0.0.8",
+        "enums": [
+            {
+                "annotatedValues": [
+                    {
+                        "description": "Customer Case Study",
+                        "name": "Customer Case Study"
+                    },
+                    {
+                        "description": "Documentation",
+                        "name": "Documentation"
+                    },
+                    {
+                        "description": "White Paper",
+                        "name": "White Paper"
+                    },
+                    {
+                        "description": "Blog",
+                        "name": "Blog"
+                    },
+                    {
+                        "description": "Demo Video",
+                        "name": "Demo Video"
+                    },
+                    {
+                        "description": "Product Datasheet",
+                        "name": "Product Datasheet"
+                    },
+                    {
+                        "description": "Recorded Webinar",
+                        "name": "Recorded Webinar"
+                    },
+                    {
+                        "description": "Solution Brief",
+                        "name": "Solution Brief"
+                    }
+                ],
+                "name": "documentation_type",
+                "values": [
+                    "Customer Case Study",
+                    "Documentation",
+                    "White Paper",
+                    "Blog",
+                    "Demo Video",
+                    "Product Datasheet",
+                    "Recorded Webinar",
+                    "Solution Brief"
+                ]
+            },
+            {
+                "annotatedValues": [
+                    {
+                        "description": "The PM for the repository.",
+                        "name": "Product Manager"
+                    },
+                    {
+                        "description": "The owner of images.",
+                        "name": "Image Owner"
+                    },
+                    {
+                        "description": "Contact that receives notifications about this repository and its images.",
+                        "name": "Notification"
+                    },
+                    {
+                        "description": "CSS Writer of Errata",
+                        "name": "CSS Writer of Errata"
+                    },
+                    {
+                        "description": "The document owner.  For RH this is also CSS Content Strategist.",
+                        "name": "Doc Owner"
+                    }
+                ],
+                "name": "contact_type",
+                "values": [
+                    "Product Manager",
+                    "Image Owner",
+                    "Notification",
+                    "CSS Writer of Errata",
+                    "Doc Owner"
+                ]
+            }
+        ],
+        "hooks": [
+            {
+                "actions": [
+                    "insert",
+                    "update"
+                ],
+                "configuration": {
+                    "arrayOrderingSignificant": false,
+                    "includeProjection": [
+                        {
+                            "field": "*",
+                            "include": true,
+                            "recursive": true
+                        }
+                    ],
+                    "watchProjection": [
+                        {
+                            "field": "*",
+                            "include": true,
+                            "recursive": true
+                        }
+                    ]
+                },
+                "name": "notificationHook"
+            }
+        ],
+        "indexes": [
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "registry"
+                    },
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "repository"
+                    }
+                ],
+                "name": "containerRepository_identity",
+                "unique": true
+            },
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "_id"
+                    }
+                ],
+                "name": null,
+                "unique": true
+            }
+        ],
+        "name": "containerRepository"
+    },
+    "schema": {
+        "access": {
+            "delete": [
+                "lb-containerRepository-delete"
+            ],
+            "find": [
+                "lb-containerRepository-find"
+            ],
+            "insert": [
+                "lb-containerRepository-insert"
+            ],
+            "update": [
+                "lb-containerRepository-update"
+            ]
+        },
+        "fields": {
+            "_id": {
+                "description": null,
+                "type": "string"
+            },
+            "application_categories": {
+                "description": "The application categories (types) of repository.",
+                "items": {
+                    "type": "string"
+                },
+                "type": "array"
+            },
+            "application_categories#": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ]
+                },
+                "description": null,
+                "type": "integer"
+            },
+            "beta": {
+                "constraints": {
+                    "required": true
+                },
+                "description": "Flag indicating whether the repository is still beta or not.",
+                "type": "boolean"
+            },
+            "build_categories": {
+                "description": "What build categories does the repository fall into, such as standalone, s2i builder, etc.",
+                "items": {
+                    "type": "string"
+                },
+                "type": "array"
+            },
+            "build_categories#": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ]
+                },
+                "description": null,
+                "type": "integer"
+            },
+            "cdn_base_url": {
+                "description": "",
+                "type": "string"
+            },
+            "contacts": {
+                "description": "Various contacts for the repository.",
+                "items": {
+                    "fields": {
+                        "email_address": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "email address for the contact",
+                            "type": "string"
+                        },
+                        "type": {
+                            "constraints": {
+                                "enum": "contact_type",
+                                "required": true
+                            },
+                            "description": "type of contact",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "type": "array"
+            },
+            "contacts#": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ]
+                },
+                "description": null,
+                "type": "integer"
+            },
+            "createdBy": {
+                "access": {
+                    "update": [
+                        "noone"
+                    ]
+                },
+                "constraints": {
+                    "required": true
+                },
+                "description": null,
+                "type": "string"
+            },
+            "creationDate": {
+                "access": {
+                    "update": [
+                        "noone"
+                    ]
+                },
+                "constraints": {
+                    "required": true
+                },
+                "description": null,
+                "type": "date",
+                "valueGenerator": {
+                    "type": "CurrentTime"
+                }
+            },
+            "deprecated": {
+                "constraints": {
+                    "required": true
+                },
+                "description": "Flag indicating whether the repository is still supported or not.",
+                "type": "boolean"
+            },
+            "description": {
+                "description": "Description of the repository.",
+                "type": "string"
+            },
+            "documentation_links": {
+                "description": "Links to marketing and doc collateral including categorization (solution brief, white paper, demo video, etc.) supposed to be displayed on the product page (NOT documentation tab on image overview tab)",
+                "items": {
+                    "fields": {
+                        "title": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "Title of the link",
+                            "type": "string"
+                        },
+                        "type": {
+                            "constraints": {
+                                "enum": "documentation_type",
+                                "required": true
+                            },
+                            "description": "The type of collateral",
+                            "type": "string"
+                        },
+                        "url": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "The URL for the documentation",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "type": "array"
+            },
+            "documentation_links#": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ]
+                },
+                "description": null,
+                "type": "integer"
+            },
+            "eol_date": {
+                "description": "",
+                "type": "date"
+            },
+            "images": {
+                "description": null,
+                "entity": "containerImage",
+                "query": {
+                    "$and": [
+                        {
+                            "field": "repositories.*.repository",
+                            "op": "$eq",
+                            "rfield": "$parent.repository"
+                        },
+                        {
+                            "field": "repositories.*.registry",
+                            "op": "$eq",
+                            "rfield": "$parent.registry"
+                        }
+                    ]
+                },
+                "type": "reference"
+            },
+            "lastUpdateDate": {
+                "constraints": {
+                    "required": true
+                },
+                "description": null,
+                "type": "date",
+                "valueGenerator": {
+                    "overwrite": true,
+                    "type": "CurrentTime"
+                }
+            },
+            "lastUpdatedBy": {
+                "constraints": {
+                    "required": true
+                },
+                "description": null,
+                "type": "string"
+            },
+            "last_metadata_update_date": {
+                "constraints": {
+                    "required": true
+                },
+                "description": "Date and time of last material update to the repository metadata.",
+                "type": "date"
+            },
+            "metrics": {
+                "access": {
+                    "update": [
+                        "lb-containerRepository-metrics-update"
+                    ]
+                },
+                "description": "Set of metrics about the repository.",
+                "fields": {
+                    "last_update_date": {
+                        "description": "The date and time when these metrics were last updated for the repository.",
+                        "type": "date"
+                    },
+                    "pulls_in_last_30_days": {
+                        "description": "The number of pulls in the last 30 days for the repository.",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "namespace": {
+                "description": "Namespace of the repository.",
+                "type": "string"
+            },
+            "non_production_only": {
+                "constraints": {
+                    "required": true
+                },
+                "description": "Repository is intended for non-production use only.",
+                "type": "boolean"
+            },
+            "objectType": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ],
+                    "update": [
+                        "noone"
+                    ]
+                },
+                "constraints": {
+                    "minLength": 1,
+                    "required": true
+                },
+                "description": null,
+                "type": "string"
+            },
+            "privileged_images_allowed": {
+                "constraints": {
+                    "required": true
+                },
+                "description": "Indicates if images in this repository are allowed to run super-privileged.",
+                "type": "boolean"
+            },
+            "prm_project_id": {
+                "description": "ID of the project in PRM.  Only for ISV repositories.",
+                "type": "string"
+            },
+            "product_id": {
+                "description": "Reference to the product for this repository by id",
+                "type": "string"
+            },
+            "products": {
+                "description": "The product for this repository.  Will be an array of size 0 to 1.",
+                "entity": "containerProduct",
+                "query": {
+                    "field": "_id",
+                    "op": "$eq",
+                    "rfield": "$parent.product_id"
+                },
+                "type": "reference"
+            },
+            "protected_for_pull": {
+                "constraints": {
+                    "required": true
+                },
+                "description": "Does the repository require subscription or other access restrictions for pull?",
+                "type": "boolean"
+            },
+            "protected_for_search": {
+                "constraints": {
+                    "required": true
+                },
+                "description": "Does the repository require subscription or other access restrictions for search?",
+                "type": "boolean"
+            },
+            "registry": {
+                "constraints": {
+                    "identity": true
+                },
+                "description": "Hostname of the registry where the repository can be accessed",
+                "type": "string"
+            },
+            "replaced_by_repository": {
+                "description": "The replacing repository",
+                "entity": "containerRepository",
+                "query": {
+                    "$and": [
+                        {
+                            "field": "repository",
+                            "op": "$eq",
+                            "rfield": "$parent.replaced_by_repository_name"
+                        },
+                        {
+                            "field": "registry",
+                            "op": "$eq",
+                            "rfield": "$parent.registry"
+                        }
+                    ]
+                },
+                "type": "reference"
+            },
+            "replaced_by_repository_name": {
+                "description": "If deprecated what is the new repo name we should point to instead?",
+                "type": "string"
+            },
+            "repository": {
+                "constraints": {
+                    "identity": true
+                },
+                "description": "Combination of image repository and namespace.",
+                "type": "string"
+            },
+            "solr_search": {
+                "description": "Data about searching this repository.",
+                "fields": {
+                    "blacklist": {
+                        "description": "search query blacklist (items we should hide)",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "blacklist#": {
+                        "access": {
+                            "find": [
+                                "anyone"
+                            ]
+                        },
+                        "description": null,
+                        "type": "integer"
+                    },
+                    "query": {
+                        "description": "Solr search query to find related docs.",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "tech_preview": {
+                "description": "Flag indicating whether the repository is in tech preview or not.",
+                "type": "boolean"
+            },
+            "vendorLabel": {
+                "description": "Label of the vendor that owns this repository.",
+                "type": "string"
+            },
+            "vendors": {
+                "description": null,
+                "entity": "containerVendor",
+                "query": {
+                    "field": "label",
+                    "op": "$eq",
+                    "rfield": "$parent.vendorLabel"
+                },
+                "type": "reference"
+            }
+        },
+        "name": "containerRepository",
+        "status": {
+            "value": "active"
+        },
+        "version": {
+            "changelog": "Container repository metadata specification",
+            "value": "0.0.8"
+        }
+    }
+}

@@ -1,0 +1,106 @@
+[
+  {
+    "label": "Product Name",
+    "model": "name",
+    "type": "text"
+  },
+  {
+    "label": "Customer Portal Product Page URL",
+    "model": "url",
+    "type": "text"
+  },
+  {
+    "label": "Product Logo URL",
+    "model": "logo_url",
+    "type": "text"
+  },
+  {
+    "type": "select",
+    "model": "application_category",
+    "label": "Application Category",
+    "multiple": true,
+    "options": {
+      "Accounting": {
+        "label": "Accounting"
+      },
+      "API Management": {
+        "label": "API Management"
+      },
+      "Application Delivery": {
+        "label": "Application Delivery"
+      },
+      "etc": {
+        "label": "etc"
+      }
+    }
+  },
+  {
+    "type": "fieldset",
+    "model": "keywords",
+    "label": "Keywords",
+    "fields": [
+      {
+        "label": "Keyword1",
+        "model": "keyword1",
+        "type": "text"
+      },
+      {
+        "label": "Keyword2",
+        "model": "keyword2",
+        "type": "text"
+      },
+      {
+        "label": "Keyword3",
+        "model": "keyword3",
+        "type": "text"
+      },
+      {
+        "label": "Keyword4",
+        "model": "keyword4",
+        "type": "text"
+      },
+      {
+        "label": "Keyword5",
+        "model": "keyword5",
+        "type": "text"
+      }
+    ]
+  },
+  {
+    "type": "fieldset",
+    "model": "competitor_keywords",
+    "label": "Competitor Keywords",
+    "fields": [
+      {
+        "label": "Keyword1",
+        "model": "competitorkeyword1",
+        "type": "text"
+      },
+      {
+        "label": "Keyword2",
+        "model": "competitorkeyword2",
+        "type": "text"
+      },
+      {
+        "label": "Keyword3",
+        "model": "competitorkeyword3",
+        "type": "text"
+      },
+      {
+        "label": "Keyword4",
+        "model": "competitorkeyword4",
+        "type": "text"
+      },
+      {
+        "label": "Keyword5",
+        "model": "competitorkeyword5",
+        "type": "text"
+      }
+    ]
+  },
+  {
+    "type": "submit",
+    "model": "submit",
+    "label": "Save Container Product"
+  }
+]

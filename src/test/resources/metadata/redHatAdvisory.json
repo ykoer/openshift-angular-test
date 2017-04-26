@@ -1,0 +1,255 @@
+{
+    "entityInfo": {
+        "datastore": {
+            "backend": "mongo",
+            "collection": "redHatAdvisory",
+            "datasource": "mongodata"
+        },
+        "defaultVersion": "0.0.2",
+        "enums": [
+            {
+                "annotatedValues": [
+                    {
+                        "description": "Red Hat Enhancment Advisory",
+                        "name": "RHEA"
+                    },
+                    {
+                        "description": "Red Hat Bug Advisory",
+                        "name": "RHBA"
+                    },
+                    {
+                        "description": "Red Hat Security Advisory",
+                        "name": "RHSA"
+                    }
+                ],
+                "name": "advisory_type",
+                "values": [
+                    "RHEA",
+                    "RHBA",
+                    "RHSA"
+                ]
+            }
+        ],
+        "indexes": [
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "fixed_cves.*.packages.*.srpm_nevra"
+                    },
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "fixed_cves.*.packages.*.cpe_id"
+                    }
+                ],
+                "name": "redHatAdvisory_srpm_nevra_cpe_id"
+            },
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "_id"
+                    }
+                ],
+                "name": null,
+                "unique": true
+            }
+        ],
+        "name": "redHatAdvisory"
+    },
+    "schema": {
+        "access": {
+            "delete": [
+                "lb-redHatAdvisory-delete"
+            ],
+            "find": [
+                "anyone"
+            ],
+            "insert": [
+                "lb-redHatAdvisory-insert"
+            ],
+            "update": [
+                "lb-redHatAdvisory-update"
+            ]
+        },
+        "fields": {
+            "_id": {
+                "access": {
+                    "update": [
+                        "noone"
+                    ]
+                },
+                "constraints": {
+                    "identity": true
+                },
+                "description": "The id of advisory.  i.e. for RHSA:2016-1001 the id is '2016-1001'",
+                "type": "string"
+            },
+            "createdBy": {
+                "description": "Who created the record.",
+                "type": "string"
+            },
+            "creationDate": {
+                "constraints": {
+                    "required": true
+                },
+                "description": "Date the record was created.  Value generated if not set",
+                "type": "date",
+                "valueGenerator": {
+                    "type": "CurrentTime"
+                }
+            },
+            "current_release_date": {
+                "constraints": {
+                    "required": true
+                },
+                "description": "The current release date for the advisory.",
+                "type": "string"
+            },
+            "fixed_cves": {
+                "description": "Array of CVEs fixed.",
+                "items": {
+                    "fields": {
+                        "cvss_score": {
+                            "description": "Common Vulnerability Scoring System (CVSS) score.",
+                            "type": "string"
+                        },
+                        "id": {
+                            "constraints": {
+                                "element-identity": true,
+                                "required": true
+                            },
+                            "description": "ID of the CVE",
+                            "type": "string"
+                        },
+                        "packages": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "Info on packages updated by this advisory.",
+                            "items": {
+                                "fields": {
+                                    "cpe_id": {
+                                        "description": "CPE ID",
+                                        "type": "string"
+                                    },
+                                    "srpm_nevra": {
+                                        "constraints": {
+                                            "required": true
+                                        },
+                                        "description": "SRPM NEVRA",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "type": "array"
+                        },
+                        "packages#": {
+                            "access": {
+                                "find": [
+                                    "anyone"
+                                ]
+                            },
+                            "description": null,
+                            "type": "integer"
+                        },
+                        "public_date": {
+                            "description": "Date the CVE was made public",
+                            "type": "string"
+                        },
+                        "severity": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "CVE severity",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "type": "array"
+            },
+            "fixed_cves#": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ]
+                },
+                "description": null,
+                "type": "integer"
+            },
+            "initial_release_date": {
+                "constraints": {
+                    "required": true
+                },
+                "description": "The initial release date for the advisory.",
+                "type": "string"
+            },
+            "lastUpdateDate": {
+                "constraints": {
+                    "required": true
+                },
+                "description": "Date the record was last updated.  Value always generated on update",
+                "type": "date",
+                "valueGenerator": {
+                    "overwrite": true,
+                    "type": "CurrentTime"
+                }
+            },
+            "lastUpdatedBy": {
+                "description": "Who last updated the record.",
+                "type": "string"
+            },
+            "objectType": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ],
+                    "update": [
+                        "noone"
+                    ]
+                },
+                "constraints": {
+                    "minLength": 1,
+                    "required": true
+                },
+                "description": null,
+                "type": "string"
+            },
+            "revision": {
+                "constraints": {
+                    "required": true
+                },
+                "description": "The revision of the advisory.  TODO remove if it's not needed, TBD",
+                "type": "string"
+            },
+            "severity": {
+                "constraints": {
+                    "required": true
+                },
+                "description": "Severity of the advisory",
+                "type": "string"
+            },
+            "type": {
+                "constraints": {
+                    "enum": "advisory_type",
+                    "required": true
+                },
+                "description": "The type of advisory.  i.e. for RHSA:2016-1001 the type is 'RHSA'",
+                "type": "string"
+            }
+        },
+        "name": "redHatAdvisory",
+        "status": {
+            "value": "active"
+        },
+        "version": {
+            "changelog": "Anyone can read (INC0487303)",
+            "value": "0.0.2"
+        }
+    }
+}

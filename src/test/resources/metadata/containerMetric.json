@@ -1,0 +1,185 @@
+{
+    "entityInfo": {
+        "datastore": {
+            "backend": "mongo",
+            "collection": "containerMetric",
+            "datasource": "mongodata"
+        },
+        "defaultVersion": "0.0.5",
+        "enums": [
+            {
+                "annotatedValues": [
+                    {
+                        "description": "metric for search",
+                        "name": "search"
+                    },
+                    {
+                        "description": "metric for pull requests",
+                        "name": "pull"
+                    }
+                ],
+                "name": "metric_type",
+                "values": [
+                    "search",
+                    "pull"
+                ]
+            }
+        ],
+        "indexes": [
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "registry"
+                    },
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "metric_type"
+                    },
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "start_date"
+                    }
+                ],
+                "name": "containerMetric_registry"
+            },
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "repository"
+                    },
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "registry"
+                    },
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "metric_type"
+                    },
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "start_date"
+                    }
+                ],
+                "name": "containerMetric_repository_registry"
+            },
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "_id"
+                    }
+                ],
+                "name": null,
+                "unique": true
+            }
+        ],
+        "name": "containerMetric"
+    },
+    "schema": {
+        "access": {
+            "delete": [
+                "lb-containerMetric-delete"
+            ],
+            "find": [
+                "lb-containerMetric-find"
+            ],
+            "insert": [
+                "lb-containerMetric-insert"
+            ],
+            "update": [
+                "lb-containerMetric-update"
+            ]
+        },
+        "fields": {
+            "_id": {
+                "access": {
+                    "update": [
+                        "noone"
+                    ]
+                },
+                "constraints": {
+                    "identity": true
+                },
+                "description": "Unique identifier for the metric.",
+                "type": "string",
+                "valueGenerator": {
+                    "type": "UUID"
+                }
+            },
+            "end_date": {
+                "constraints": {
+                    "required": true
+                },
+                "description": "The end of this metric window.",
+                "type": "date"
+            },
+            "metric_type": {
+                "constraints": {
+                    "enum": "metric_type",
+                    "required": true
+                },
+                "description": "The type of metric this record is for.",
+                "type": "string"
+            },
+            "objectType": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ],
+                    "update": [
+                        "noone"
+                    ]
+                },
+                "constraints": {
+                    "minLength": 1,
+                    "required": true
+                },
+                "description": null,
+                "type": "string"
+            },
+            "registry": {
+                "constraints": {
+                    "required": true
+                },
+                "description": "Hostname of the registry where the repository can be accessed",
+                "type": "string"
+            },
+            "repository": {
+                "description": "Combination of image repository and namespace.  When 'repository' is null, the metric is for the whole registry.",
+                "type": "string"
+            },
+            "start_date": {
+                "constraints": {
+                    "required": true
+                },
+                "description": "The start of this metric window.",
+                "type": "date"
+            },
+            "value": {
+                "constraints": {
+                    "required": true
+                },
+                "description": "The value of this metric within the given time window",
+                "type": "integer"
+            }
+        },
+        "name": "containerMetric",
+        "status": {
+            "value": "active"
+        },
+        "version": {
+            "changelog": "Container metric metadata specification",
+            "value": "0.0.5"
+        }
+    }
+}

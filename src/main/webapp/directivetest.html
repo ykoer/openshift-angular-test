@@ -1,0 +1,75 @@
+<html>
+<head>
+    <title>Website</title>
+
+    <!--- Styles -->
+    <link rel="stylesheet" href="bower_components/patternfly/dist/css/patternfly.min.css">
+    <link rel="stylesheet" href="bower_components/patternfly/dist/css/patternfly-additions.min.css">
+    <link rel="stylesheet" href="bower_components/angular-patternfly/dist/styles/angular-patternfly.min.css"/>
+
+
+    <!-- jQuery -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+
+    <!-- Patternfly itself -->
+    <script src="bower_components/patternfly/dist/js/patternfly.min.js"></script>
+
+    <!-- Angular -->
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js"></script>
+
+
+    <!--- UI Bootstrap -->
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+
+    <!--- Angular Patternfly -->
+    <script src="bower_components/angular-patternfly/dist/angular-patternfly.min.js"></script>
+
+
+    <script type="text/javascript">
+      var app = angular.module("myapp", ['patternfly']);
+
+      app.controller("MainController", function($scope) {
+        $scope.msg = "Hello World";
+        $scope.item = {
+            name: 'Homer Simpson',
+            description: 'I like donuts and Duff.  Doh!'
+        };
+      })
+    </script>
+</head>
+<body ng-app="myapp" class="cards-pf" ng-controller="MainController">
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <h3 class="panel-title">Horizontal Form</h3>
+                </div>
+
+                <div class="panel-body">
+                    <form class="form-horizontal">
+                        <pf-form-group pf-label="Name" required pf-label-class="col-sm-2" pf-input-class="col-sm-5">
+                            <input id="name" name="name" ng-model="item.name" type="text" required/>
+                        </pf-form-group>
+                        <pf-form-group pf-label="Description" pf-label-class="col-sm-2" pf-input-class="col-sm-5">
+                            <textarea id="description" name="description" ng-model="item.description"></textarea>
+                        </pf-form-group>
+                    </form>
+
+                </div>
+
+            </div> <!-- /panel -->
+
+        </div>
+    </div> <!-- /row -->
+
+</div> <!-- /container -->
+
+
+</body>
+</html>

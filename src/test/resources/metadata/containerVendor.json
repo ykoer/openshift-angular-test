@@ -1,0 +1,252 @@
+{
+    "entityInfo": {
+        "datastore": {
+            "backend": "mongo",
+            "collection": "containerVendor",
+            "datasource": "mongodata"
+        },
+        "defaultVersion": "0.0.7-SNAPSHOT",
+        "indexes": [
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "name"
+                    }
+                ],
+                "name": "containerVendor_name"
+            },
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "label"
+                    }
+                ],
+                "name": "containerVendor_label",
+                "unique": true
+            },
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "_id"
+                    }
+                ],
+                "name": null,
+                "unique": true
+            }
+        ],
+        "name": "containerVendor"
+    },
+    "schema": {
+        "access": {
+            "delete": [
+                "lb-containerVendor-delete"
+            ],
+            "find": [
+                "lb-containerVendor-find"
+            ],
+            "insert": [
+                "lb-containerVendor-insert"
+            ],
+            "update": [
+                "lb-containerVendor-update"
+            ]
+        },
+        "fields": {
+            "_id": {
+                "description": null,
+                "type": "string"
+            },
+            "company_url": {
+                "description": "URL to the vendor's main website",
+                "type": "string"
+            },
+            "contact": {
+                "description": "General contact information for the vendor, to be displayed on the vendor page on RHCC",
+                "fields": {
+                    "email": {
+                        "description": "General contact email address",
+                        "type": "string"
+                    },
+                    "phone": {
+                        "description": "General contact phone number",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "createdBy": {
+                "access": {
+                    "update": [
+                        "noone"
+                    ]
+                },
+                "constraints": {
+                    "required": true
+                },
+                "description": null,
+                "type": "string"
+            },
+            "creationDate": {
+                "access": {
+                    "update": [
+                        "noone"
+                    ]
+                },
+                "constraints": {
+                    "required": true
+                },
+                "description": null,
+                "type": "date",
+                "valueGenerator": {
+                    "type": "CurrentTime"
+                }
+            },
+            "description": {
+                "description": null,
+                "type": "string"
+            },
+            "industries": {
+                "description": "the industry / vertical the vendor belongs to",
+                "items": {
+                    "type": "string"
+                },
+                "type": "array"
+            },
+            "industries#": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ]
+                },
+                "description": null,
+                "type": "integer"
+            },
+            "label": {
+                "constraints": {
+                    "identity": true
+                },
+                "description": null,
+                "type": "string"
+            },
+            "lastUpdateDate": {
+                "constraints": {
+                    "required": true
+                },
+                "description": null,
+                "type": "date",
+                "valueGenerator": {
+                    "overwrite": true,
+                    "type": "CurrentTime"
+                }
+            },
+            "lastUpdatedBy": {
+                "constraints": {
+                    "required": true
+                },
+                "description": null,
+                "type": "string"
+            },
+            "logo_url": {
+                "description": null,
+                "type": "string"
+            },
+            "name": {
+                "description": null,
+                "type": "string"
+            },
+            "objectType": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ],
+                    "update": [
+                        "noone"
+                    ]
+                },
+                "constraints": {
+                    "minLength": 1,
+                    "required": true
+                },
+                "description": null,
+                "type": "string"
+            },
+            "registry_urls": {
+                "description": null,
+                "items": {
+                    "type": "string"
+                },
+                "type": "array"
+            },
+            "registry_urls#": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ]
+                },
+                "description": null,
+                "type": "integer"
+            },
+            "repositories": {
+                "description": null,
+                "entity": "containerRepository",
+                "query": {
+                    "field": "vendorLabel",
+                    "op": "$eq",
+                    "rfield": "$parent.label"
+                },
+                "type": "reference",
+                "versionvalue": "0.0.7-SNAPSHOT"
+            },
+            "rss_feed_url": {
+                "description": "RSS feed for vendor.",
+                "type": "string"
+            },
+            "social_media_links": {
+                "description": null,
+                "items": {
+                    "fields": {
+                        "name": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "The name of the social media provider.",
+                            "type": "string"
+                        },
+                        "url": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "The URL to the social media site for the vendor.",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "type": "array"
+            },
+            "social_media_links#": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ]
+                },
+                "description": null,
+                "type": "integer"
+            }
+        },
+        "name": "containerVendor",
+        "status": {
+            "value": "active"
+        },
+        "version": {
+            "changelog": "Container vendor metadata specification",
+            "value": "0.0.7-SNAPSHOT"
+        }
+    }
+}

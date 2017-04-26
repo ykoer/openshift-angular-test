@@ -1,0 +1,338 @@
+{
+    "entityInfo": {
+        "datastore": {
+            "backend": "mongo",
+            "collection": "containerProduct",
+            "datasource": "mongodata"
+        },
+        "defaultVersion": "0.0.8",
+        "enums": [
+            {
+                "annotatedValues": [
+                    {
+                        "description": "Customer Case Study",
+                        "name": "Customer Case Study"
+                    },
+                    {
+                        "description": "Documentation",
+                        "name": "Documentation"
+                    },
+                    {
+                        "description": "White Paper",
+                        "name": "White Paper"
+                    },
+                    {
+                        "description": "Blog",
+                        "name": "Blog"
+                    },
+                    {
+                        "description": "Demo Video",
+                        "name": "Demo Video"
+                    },
+                    {
+                        "description": "Product Datasheet",
+                        "name": "Product Datasheet"
+                    },
+                    {
+                        "description": "Recorded Webinar",
+                        "name": "Recorded Webinar"
+                    },
+                    {
+                        "description": "Solution Brief",
+                        "name": "Solution Brief"
+                    }
+                ],
+                "name": "documentation_type",
+                "values": [
+                    "Customer Case Study",
+                    "Documentation",
+                    "White Paper",
+                    "Blog",
+                    "Demo Video",
+                    "Product Datasheet",
+                    "Recorded Webinar",
+                    "Solution Brief"
+                ]
+            }
+        ],
+        "hooks": [
+            {
+                "actions": [
+                    "insert",
+                    "update"
+                ],
+                "configuration": {
+                    "arrayOrderingSignificant": false,
+                    "includeProjection": [
+                        {
+                            "field": "*",
+                            "include": true,
+                            "recursive": true
+                        }
+                    ],
+                    "watchProjection": [
+                        {
+                            "field": "*",
+                            "include": true,
+                            "recursive": true
+                        }
+                    ]
+                },
+                "name": "notificationHook"
+            }
+        ],
+        "indexes": [
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "_id"
+                    },
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "vendorLabel"
+                    }
+                ],
+                "name": "containerProduct_identity",
+                "unique": true
+            },
+            {
+                "fields": [
+                    {
+                        "caseInsensitive": false,
+                        "dir": "$asc",
+                        "field": "_id"
+                    }
+                ],
+                "name": null,
+                "unique": true
+            }
+        ],
+        "name": "containerProduct"
+    },
+    "schema": {
+        "access": {
+            "delete": [
+                "lb-containerProduct-delete"
+            ],
+            "find": [
+                "lb-containerProduct-find"
+            ],
+            "insert": [
+                "lb-containerProduct-insert"
+            ],
+            "update": [
+                "lb-containerProduct-update"
+            ]
+        },
+        "fields": {
+            "_id": {
+                "access": {
+                    "update": [
+                        "noone"
+                    ]
+                },
+                "constraints": {
+                    "identity": true
+                },
+                "description": "Unique identifier for the product.",
+                "type": "string"
+            },
+            "application_categories": {
+                "description": "The application categories (types) of product.",
+                "items": {
+                    "type": "string"
+                },
+                "type": "array"
+            },
+            "application_categories#": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ]
+                },
+                "description": null,
+                "type": "integer"
+            },
+            "build_categories": {
+                "description": "What build categories does the product fall into, such as standalone, s2i builder, etc.",
+                "items": {
+                    "type": "string"
+                },
+                "type": "array"
+            },
+            "build_categories#": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ]
+                },
+                "description": null,
+                "type": "integer"
+            },
+            "documentation_links": {
+                "description": "Links to marketing and doc collateral including categorization (solution brief, white paper, demo video, etc.) supposed to be displayed on the product page (NOT documentation tab on image overview tab)",
+                "items": {
+                    "fields": {
+                        "title": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "Title of the link",
+                            "type": "string"
+                        },
+                        "type": {
+                            "constraints": {
+                                "enum": "documentation_type",
+                                "required": true
+                            },
+                            "description": "The type of collateral",
+                            "type": "string"
+                        },
+                        "url": {
+                            "constraints": {
+                                "required": true
+                            },
+                            "description": "The URL for the documentation",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "type": "array"
+            },
+            "documentation_links#": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ]
+                },
+                "description": null,
+                "type": "integer"
+            },
+            "industries": {
+                "description": "the industry / vertical for the product",
+                "items": {
+                    "type": "string"
+                },
+                "type": "array"
+            },
+            "industries#": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ]
+                },
+                "description": null,
+                "type": "integer"
+            },
+            "keywords": {
+                "description": "All relevant keywords resp. search terms for a particular product",
+                "items": {
+                    "type": "string"
+                },
+                "type": "array"
+            },
+            "keywords#": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ]
+                },
+                "description": null,
+                "type": "integer"
+            },
+            "logo_url": {
+                "description": "Product URL similar to vendor logo",
+                "type": "string"
+            },
+            "long_description": {
+                "description": "a multi-sentence description of the product",
+                "type": "string"
+            },
+            "name": {
+                "constraints": {
+                    "required": true
+                },
+                "description": "the vendor provided name of the product",
+                "type": "string"
+            },
+            "objectType": {
+                "access": {
+                    "find": [
+                        "anyone"
+                    ],
+                    "update": [
+                        "noone"
+                    ]
+                },
+                "constraints": {
+                    "minLength": 1,
+                    "required": true
+                },
+                "description": null,
+                "type": "string"
+            },
+            "repositories": {
+                "description": "The repositories that reference this product",
+                "entity": "containerRepository",
+                "query": {
+                    "$and": [
+                        {
+                            "field": "vendorLabel",
+                            "op": "$eq",
+                            "rfield": "$parent.vendorLabel"
+                        },
+                        {
+                            "field": "product_id",
+                            "op": "$eq",
+                            "rfield": "$parent._id"
+                        }
+                    ]
+                },
+                "type": "reference"
+            },
+            "short_description": {
+                "description": "a one sentence desc as provided in connect",
+                "type": "string"
+            },
+            "url": {
+                "description": "a link to vendor product URL",
+                "type": "string"
+            },
+            "vendorLabel": {
+                "access": {
+                    "update": [
+                        "noone"
+                    ]
+                },
+                "constraints": {
+                    "identity": true,
+                    "required": true
+                },
+                "description": "Label of the vendor that owns this product.",
+                "type": "string"
+            },
+            "vendors": {
+                "description": "The owner of this product, size of array can be expected to be always one",
+                "entity": "containerVendor",
+                "query": {
+                    "field": "label",
+                    "op": "$eq",
+                    "rfield": "$parent.vendorLabel"
+                },
+                "type": "reference"
+            }
+        },
+        "name": "containerProduct",
+        "status": {
+            "value": "active"
+        },
+        "version": {
+            "changelog": "Container product metadata specification",
+            "value": "0.0.8"
+        }
+    }
+}

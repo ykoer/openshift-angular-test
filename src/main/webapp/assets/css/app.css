@@ -1,0 +1,23 @@
+@media (min-width: 1024px) {
+  .my-grid {
+    width: 772px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .my-grid {
+    width: 972px;
+  }
+}
+
+@media (min-height: 768px) {
+  .my-grid {
+    height: 600px;
+  }
+}
+
+@media (min-height: 900px) {
+  .my-grid {
+    height: 762px;
+  }
+}

@@ -1,0 +1,24 @@
+<div class="middle-header header-toolbar">
+    <div class="container-fluid">
+        <div class="page-header page-header-bleed-right page-header-bleed-left">
+            <h1>Container Products</h1>
+        </div>
+        <div class="data-toolbar-filter">
+            <form role="form" class="search-pf has-button">
+                <div class="form-group filter-controls has-clear">
+                    <div class="search-pf-input-group">
+                        <label for="name-filter" class="sr-only">Filter by name</label>
+                        <input type="search" placeholder="Filter by name" class="form-control" id="name-filter" ng-model="filterValue" autocorrect="off" autocapitalize="off" spellcheck="false" ng-change="filter()">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 gutter-top">
+                <div class="my-grid" ui-grid="gridOptions" ui-grid-pagination class="grid"></div>
+            </div>
+        </div>
+    </div>
+</div>
+  
