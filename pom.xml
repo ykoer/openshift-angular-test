@@ -205,6 +205,7 @@
                             <directory>src/main/resources</directory>
                         </resource>
                     </webResources>
+                    <warName>ROOT</warName>
                 </configuration>
             </plugin>
 
